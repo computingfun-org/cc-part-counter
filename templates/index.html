@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/src/main.css">
+    <script src="/src/htmx.min.js"></script>
+    <script src="src/tailwindcss.3.4.3.js"></script>
 </head>
 
 <body>
-    Hello Zac
-    <video id="camera"></video>
-    <script src="/files/camera.js"></script>
+    <div hx-get="/camera.html" hx-trigger="load" hx-swap="outerHTML"></div>
 </body>
 
 </html>
