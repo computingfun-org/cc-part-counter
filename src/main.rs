@@ -8,28 +8,23 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         actix_web::App::new()
             .service(
-                web::resource("/src/htmx.min.js")
-                    .to(|| async { http_response_js(include_str!("files/htmx.min.js")) }),
-            )
-            .service(
-                web::resource("/src/tailwindcss.3.4.3.js")
-                    .to(|| async { http_response_js(include_str!("files/tailwindcss.3.4.3.js")) }),
-            )
-            .service(
-                web::resource("/src/main.css")
-                    .get(|| async { http_response_css(include_str!("files/main.css")) }),
-            )
-            .service(
-                web::resource("/src/qr-scanner.min.js")
-                    .get(|| async { http_response_js(include_str!("files/qr-scanner.min.js")) }),
-            )
-            .service(
-                web::resource("/src/qr-scanner-worker.min.js").get(|| async {
-                    http_response_js(include_str!("files/qr-scanner-worker.min.js"))
-                }),
+                web::scope("/src")
+                    .service(
+                        web::resource("/htmx.min.js")
+                            .get(|| async { http_response_js(include_str!("files/htmx.min.js")) }),
+                    )
+                    .service(web::resource("/tailwindcss.3.4.3.js").get(|| async {
+                        http_response_js(include_str!("files/tailwindcss.3.4.3.js"))
+                    }))
+                    .service(web::resource("/qr-scanner.min.js").get(|| async {
+                        http_response_js(include_str!("files/qr-scanner.min.js"))
+                    }))
+                    .service(web::resource("/qr-scanner-worker.min.js").get(|| async {
+                        http_response_js(include_str!("files/qr-scanner-worker.min.js"))
+                    })),
             )
             .service(web::resource("/").to(|| async { Index {} }))
-            .service(web::resource("/camera.html").to(|| async { CameraX {} }))
+            .service(web::resource("/camera.html").get(|| async { CameraX {} }))
     })
     .bind("0.0.0.0:8080")?
     .run()
